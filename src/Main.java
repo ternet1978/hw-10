@@ -2,6 +2,7 @@ import com.sun.org.apache.xpath.internal.objects.XString;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Main {
@@ -25,6 +26,7 @@ public class Main {
         String[] array = {"1, 2, 0", "4, 5"};
         System.out.println("\nTask 3 - string array to sorted string:");
         System.out.println(task3(array));
+
 
         System.out.println("\nTask 4 - RANDOM NUMBERS:");
 
@@ -60,46 +62,34 @@ public class Main {
         Stream<T> both = Stream.concat(first.limit(limit), second.limit(limit));
         List<T> bothLists = both.collect(Collectors.toList());
         Collections.shuffle(bothLists);
-        both = bothLists.stream();
-        return both;
+        return bothLists.stream();
     }
 
     public static String odd(List<String> list) {
-        String result = "";
-        for (int i = 0; i < list.size(); i++) {
-            if (i % 2 != 0) {
-                result += i + ". " + list.get(i);
-                if (i < list.size() - 2) {
-                    result += ", ";
-                }
-            }
+        List <String> tempList = new ArrayList<>();
+        for (Integer i = 0; i < list.size(); i++) {
+            tempList.add((i + 1) + ". " + list.get(i));
         }
-        return result;
+        return IntStream.range(0, tempList.size())
+                .filter(n -> n % 2 == 0)
+                .mapToObj(tempList::get)
+                .collect(Collectors.joining(", "));
     }
 
     public static List<String> task2(List<String> list) {
-        Stream<String> names = list.stream()
+        return (List) list.stream()
                 .map(s -> s.toUpperCase())
-                .sorted(Comparator.reverseOrder());
-        return (List) names.collect(Collectors.toList());
+                .sorted(Comparator.reverseOrder())
+                .collect(Collectors.toList());
     }
 
+
     public static String task3(String[] array) {
-        String result = "";
-        List<Integer> list = new ArrayList<Integer>();
-        String[] stringArray;
-        for (String i : array) {
-            stringArray = i.split(",");
-            for (String j : stringArray) {
-                list.add(Integer.valueOf(j.trim()));
-            }
-        }
-        Stream<Integer> stream = list.stream()
-                .sorted();
-        list = (List) stream.collect(Collectors.toList());
-        result = list.toString();
-        result = result.substring(1, result.length() - 1);
-        return result;
+        return Arrays.stream(array)
+                .flatMap(e -> Arrays.stream(e.split(",")))
+                .map(s -> s.trim())
+                .sorted((o1, o2) -> (Integer.valueOf(o1) - Integer.valueOf(o2)))
+                .collect(Collectors.joining(", "));
     }
 
 
