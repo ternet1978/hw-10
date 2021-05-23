@@ -20,7 +20,6 @@ public class Main {
         listOfNames.add("Alex");
         System.out.println(odd(listOfNames));
 
-
         System.out.println("\nTask 2 - to upper case and reverse sorted order:");
         System.out.println(task2(listOfNames));
         String[] array = {"1, 2, 0", "4, 5"};
@@ -66,13 +65,9 @@ public class Main {
     }
 
     public static String odd(List<String> list) {
-        List <String> tempList = new ArrayList<>();
-        for (Integer i = 0; i < list.size(); i++) {
-            tempList.add((i + 1) + ". " + list.get(i));
-        }
-        return IntStream.range(0, tempList.size())
-                .filter(n -> n % 2 == 0)
-                .mapToObj(tempList::get)
+        return list.stream()
+                .filter(s -> list.indexOf(s) % 2 == 0)
+                .map(s -> (list.indexOf(s) + 1) + ". " + s)
                 .collect(Collectors.joining(", "));
     }
 
